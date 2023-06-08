@@ -32,6 +32,12 @@ const {
   updateUserProfile
 } = require("../controllers/ProfileController");
 
+const { 
+  publish,
+  unpublish,
+  approvedByAdmin
+} = require("../controllers/PublishController");
+
 const multer = require("multer");
 /**-----------------upload file start--------------------- **/
 var storage = multer.diskStorage({
@@ -72,4 +78,9 @@ router.post("/user/login",login);
 // update user profile
 router.post("/update/user/profile/:id",upload.single("image"),updateUserProfile);
 
+// post publish
+
+router.get("/publish/post/:id",publish);
+router.get("/unpublish/post/:id",unpublish);
+router.get("/post/approved/:id",approvedByAdmin);
 module.exports = router;
