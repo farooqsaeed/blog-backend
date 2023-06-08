@@ -1,7 +1,11 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-// create category
+
+const create_jwt_token = async (id) =>{
+    return jwt.sign({id},process.env.JWT_SECRET);
+}
 
 const createUser = async (req,res) => {
     
@@ -19,8 +23,12 @@ const createUser = async (req,res) => {
             profile:process.env.AVATER_IMAGE
         });
 
+        let jwttoken = await create_jwt_token(user._id);
+
         res.json({
             success:true,
+            token:jwttoken,
+            data:user,
             message:'user registered successfully!'
         })
         
