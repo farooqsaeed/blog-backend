@@ -31,7 +31,7 @@ const getAllCategories = async (req,res)=>{
     let categories= await Category.find({});
 
     res.json({
-        success:false,
+        success:true,
         message:'categories fetcehd successfully!',
         data:categories
     })
