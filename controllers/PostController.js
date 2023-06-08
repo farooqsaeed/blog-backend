@@ -50,10 +50,14 @@ const getPostById = async (req,res)=>{
 }
 
 const updatePost = async (req,res) => {
-     
-     await Post.findByIdAndUpdate(req.body.id,{
+     let updateImage = req.body.existingImage;
+
+     if(updateImage == "" || updateImage ==null){
+        updateImage = "upload/"+req.file.filename;
+     }
+     await Post.findByIdAndUpdate(req.params.id,{
         title:req.body.title,
-        image:"upload/"+req.file.filename,
+        image:updateImage,
         body:req.body.body,
         auther:req.body.auther,
         category:req.body.category,

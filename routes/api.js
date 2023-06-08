@@ -24,6 +24,14 @@ const {
     deletePost
 } = require("../controllers/PostController");
 
+const { 
+  login
+} = require("../controllers/AuthController");
+
+const { 
+  updateUserProfile
+} = require("../controllers/ProfileController");
+
 const multer = require("multer");
 /**-----------------upload file start--------------------- **/
 var storage = multer.diskStorage({
@@ -39,25 +47,29 @@ var upload = multer({ storage: storage });
 /**-----------------upload file end--------------------- **/
 
 // category routes
-router.post("/store/category",createCategory);
+router.post("/store/category",authToken,createCategory);
 router.get("/get/categories",getAllCategories);
-router.post("/update/category",updateCategory);
-router.get("/delete/category/:id",deleteCategory);
+router.post("/update/category",authToken,updateCategory);
+router.get("/delete/category/:id",authToken,deleteCategory);
 
 // users routes
 router.post("/register/user",createUser);
-router.get("/get/users",getAllUsers);
-router.get("/get/user/:id",getUserById);
-router.post("/update/user",updateUser);
-router.get("/delete/user/:id",deleteUser);
+router.get("/get/users",authToken,getAllUsers);
+router.get("/get/user/:id",authToken,getUserById);
+router.post("/update/user",authToken,updateUser);
+router.get("/delete/user/:id",authToken,deleteUser);
 
 // posts routes
 router.post("/create/post",upload.single("image"),createPost);
 router.get("/get/posts",getAllPosts);
 router.get("/get/post/:id",getPostById);
-router.post("/update/post",updatePost);
-router.get("/delete/post/:id",deletePost);
-    
-    
+router.post("/update/post/:id",upload.single("image"),updatePost);
+router.get("/delete/post/:id",authToken,deletePost);    
+
+// auth routes
+router.post("/user/login",login);
+
+// update user profile
+router.post("/update/user/profile/:id",upload.single("image"),updateUserProfile);
 
 module.exports = router;
