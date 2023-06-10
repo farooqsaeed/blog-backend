@@ -39,7 +39,8 @@ const {
 } = require("../controllers/PublishController");
 
 const { 
-  restlink
+  restlink,
+  ForgotPassword
 } = require("../controllers/ForgotPasswordController");
 
 const multer = require("multer");
@@ -91,4 +92,5 @@ router.get("/post/approved/:id",approvedByAdmin);
 
 // send mail route
 router.post("/send-rest-link",restlink);
+router.post("/forgot/password",ForgotPassword);
 module.exports = router;

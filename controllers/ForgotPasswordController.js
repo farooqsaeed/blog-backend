@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const RestLink = require("../models/RestLink");
 const User = require("../models/User");
 const md5 = require("md5");
+const bcrypt = require("bcrypt");
 
 const sendRestLink = async (mail,hash) => {
 
@@ -63,8 +64,47 @@ const restlink = async (req,res) => {
 
 }
 
+const ForgotPassword = async (req,res) =>{
+
+    let result = await RestLink.findOne({hash:req.body.hash});
+
+    if(result != null){
+        let CurrentTime = new Date().getTime();
+        console.log("current "+ CurrentTime)
+        console.log("store "+ result.expire)
+        if(Number(result.expire) > CurrentTime){
+
+            if(req.body.new_password == req.body.confirm_password){
+                
+                let salt = await bcrypt.genSalt();
+                let hashPassword = await bcrypt.hash(req.body.new_password,salt);
+                await User.findOneAndUpdate({email:result.email},{
+                    password:hashPassword
+                });
+                res.status(200).json({
+                    success:true,
+                    message:"your password has updated successfully!"
+                })
+            }else{
+                res.status(401).json({
+                    success:false,
+                    message:"new password and confirm password are not same!"
+                })
+            }
+
+        }else{
+            res.status(401).json({
+                success:false,
+                message:"your link has expired!"
+            })
+        }
+    }
+
+}
+
 
 
 module.exports = {
-    restlink
+    restlink,
+    ForgotPassword
 }
