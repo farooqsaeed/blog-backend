@@ -38,6 +38,10 @@ const {
   approvedByAdmin
 } = require("../controllers/PublishController");
 
+const { 
+  restlink
+} = require("../controllers/ForgotPasswordController");
+
 const multer = require("multer");
 /**-----------------upload file start--------------------- **/
 var storage = multer.diskStorage({
@@ -83,4 +87,8 @@ router.post("/update/user/profile/:id",upload.single("image"),updateUserProfile)
 router.get("/publish/post/:id",publish);
 router.get("/unpublish/post/:id",unpublish);
 router.get("/post/approved/:id",approvedByAdmin);
+
+
+// send mail route
+router.post("/send-rest-link",restlink);
 module.exports = router;

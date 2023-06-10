@@ -17,6 +17,12 @@ app.use(express.static(__dirname + '/public'));
 
 app.use("/v1/api",require("./routes/api"));
 
+app.use("*",(req,res)=>{
+    res.json({
+        error:"can not found this route!"
+    })
+});
+
 server.listen(4000,()=>{
     console.log("servre is runing at 4000 !");
     // console.log(process)
