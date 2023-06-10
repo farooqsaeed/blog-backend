@@ -35,30 +35,39 @@ const sendRestLink = async (mail,hash) => {
 
 
 const restlink = async (req,res) => {
+    try {
 
-    let user = await User.findOne({email:req.body.email});
+        let user = await User.findOne({email:req.body.email});
 
-    if(user != null){
+        if(user != null){
+            let currentTimeStamp = new Date().getTime();
+            let fiveMin = 60*5*1000;
+            let expire = currentTimeStamp + fiveMin;
+            let hash = md5(currentTimeStamp);
+            await RestLink.create({
+                hash:hash,
+                email:req.body.email,
+                expire:expire
+            });
+
+            await sendRestLink(req.body.email,hash);
+
+            res.status(200).json({
+                success:true,
+                message:"please check your email!"
+            })
+
+        }else{
+            res.status(401).json({
+                success:false,
+                message:"user not found!"
+            })
+        }
         
-        let currentTimeStamp = new Date().getTime();
-        let fiveMin = 60*5*1000;
-        let expire = currentTimeStamp + fiveMin;
-        let hash = md5(currentTimeStamp);
-        await RestLink.create({
-            hash:hash,
-            email:req.body.email,
-            expire:expire
-        });
-
-        await sendRestLink(req.body.email,hash);
-
-        res.status(200).json({
-            message:"please check your email!"
-        })
-
-    }else{
+    } catch (error) {
         res.status(401).json({
-            message:"user not found!"
+            success:false,
+            message:error
         })
     }
 
@@ -84,7 +93,7 @@ const ForgotPassword = async (req,res) =>{
                 res.status(200).json({
                     success:true,
                     message:"your password has updated successfully!"
-                })
+                });
             }else{
                 res.status(401).json({
                     success:false,
@@ -98,6 +107,11 @@ const ForgotPassword = async (req,res) =>{
                 message:"your link has expired!"
             })
         }
+    }else{
+        res.status(401).json({
+            success:false,
+            message:"invalid link!"
+        })
     }
 
 }
