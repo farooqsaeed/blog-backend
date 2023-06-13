@@ -6,6 +6,10 @@ const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 const server = http.createServer(app);
 require('dotenv').config();
+var cors = require('cors')
+
+ 
+app.use(cors())
 app.use(bodyparser.json());
 
 mongoose.set("strictQuery",false);
@@ -27,3 +31,5 @@ server.listen(4000,()=>{
     console.log("servre is runing at 4000 !");
     // console.log(process)
 })
+
+// @import '~bootstrap/dist/css/bootstrap.min.css';
