@@ -9,6 +9,8 @@ const create_jwt_token = async (id) =>{
 const login = async (req,res) => {
     // find user by email
     let user = await User.findOne({email:req.body.email});
+    console.log(user)
+    console.log("*************************")
     if(user != null){
         let isValid = await bcrypt.compare(req.body.password,user.password);
         if(isValid){

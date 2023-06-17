@@ -7,10 +7,14 @@ const mongoose = require("mongoose");
 const server = http.createServer(app);
 require('dotenv').config();
 var cors = require('cors')
+const rateLimit = require("express-rate-limit");
+const mongoSanitize = require('express-mongo-sanitize');
 
  
 app.use(cors())
 app.use(bodyparser.json());
+
+app.use(mongoSanitize());
 
 mongoose.set("strictQuery",false);
 mongoose.connect(process.env.DATABASE_URL).then(()=>{
@@ -18,6 +22,14 @@ mongoose.connect(process.env.DATABASE_URL).then(()=>{
 });
 
 app.use(express.static(__dirname + '/public'));
+
+app.use(rateLimit({
+    windowMs: 15*60*1000,
+    max:100,
+    message:"your IP has been blocked!"
+}))
+
+
 
 app.use("/v1/api",require("./routes/api"));
 

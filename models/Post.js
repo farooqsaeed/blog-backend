@@ -27,6 +27,9 @@ const PostSchema = new mongoose.Schema({
    is_approvedByAdmin:{
     type:Boolean,
     default:false
+   },
+   user_id:{
+    
    }
 
 },{timestamps:true});

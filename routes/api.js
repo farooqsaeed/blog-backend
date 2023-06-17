@@ -58,7 +58,7 @@ var upload = multer({ storage: storage });
 /**-----------------upload file end--------------------- **/
 
 // category routes
-router.post("/store/category",authToken,createCategory);
+router.post("/store/category",createCategory);
 router.get("/get/categories",getAllCategories);
 router.post("/update/category",authToken,updateCategory);
 router.get("/delete/category/:id",authToken,deleteCategory);

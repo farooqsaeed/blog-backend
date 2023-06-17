@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
      profile:{
         type:String,
         default:""
+     },
+     is_suspend:{
+      type:Boolean,
+      default:false
      }
 
 },{timestamps:true});
